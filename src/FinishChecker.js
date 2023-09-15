@@ -6,7 +6,7 @@ const FinishChecker = ({ sudokuGrid }) => {
 };
 
 const validateSudoku = (grid) => {
-    // Проверка на корректность судоку, аналогичная логике в компоненте Validator.js.
+    // Проверка на корректность судоку (валидация)
 
     // Проверка на наличие пустых ячеек
     for (let row = 0; row < 9; row++) {

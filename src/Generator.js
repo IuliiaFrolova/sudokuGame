@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; // измннить State на глобальное состояние из стора
 import Grid from './Grid';
-import './Generator.css';
 import useStore from "./store";
 
 const createEmptyGrid = () => {
@@ -12,8 +11,8 @@ const createEmptyGrid = () => {
     return grid;
 };
 
-const isSafeToPlaceNumber = (grid, row, col, num) => {
-    // Проверяем, безопасно ли разместить число num в данной ячейке.
+const isOkToPlaceNumber = (grid, row, col, num) => {
+    // Проверяем, можно ли разместить число num в данной ячейке.
     // Проверяем, чтобы число не повторялось в строке, столбце и 3x3 квадрате.
 
     return (
@@ -22,6 +21,7 @@ const isSafeToPlaceNumber = (grid, row, col, num) => {
         !usedInBox(grid, row - (row % 3), col - (col % 3), num)
     );
 };
+
 
 const usedInRow = (grid, row, num) => {
     // Проверяем, используется ли число num в данной строке.
@@ -41,7 +41,7 @@ const usedInColumn = (grid, col, num) => {
 };
 
 const usedInBox = (grid, startRow, startCol, num) => {
-    // Проверяем, используется ли число num в 3x3 квадрате, начиная с заданной ячейки.
+    // Делаем проверку, используется ли число num в квадрате 3x3, начиная с заданной ячейки.
 
     for (let row = 0; row < 3; row++) {
         for (let col = 0; col < 3; col++) {
@@ -54,13 +54,13 @@ const usedInBox = (grid, startRow, startCol, num) => {
 };
 
 const solveSudoku = (grid) => {
-    // Реализация алгоритма "Backtracking" для решения судоку.
+    // Алгоритм "Backtracking" для решения судоку.
 
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             if (grid[row][col] === null) {
                 for (let num = 1; num <= 9; num++) {
-                    if (isSafeToPlaceNumber(grid, row, col, num)) {
+                    if (isOkToPlaceNumber(grid, row, col, num)) {
                         grid[row][col] = num;
                         if (solveSudoku(grid)) {
                             return true;
@@ -96,14 +96,16 @@ const Generator = () => {
     useEffect(() => {
         const grid = createEmptyGrid();
         solveSudoku(grid);
-        removeNumbers(grid, 40);
-        setSudokuGrid(grid); // Устанавливаем сгенерированное судоку в глобальное состояние
+        removeNumbers(grid, 10);
+        setSudokuGrid(grid); // Помещаем сгенерированное судоку в глобальное состояние (store)
     }, []);
-
 
     return (
         <div className="generator">
-            <Grid sudokuGrid={sudokuGrid} />
+            <Grid
+                sudokuGrid={sudokuGrid}
+                setSudokuGrid={setSudokuGrid}
+            />
         </div>
     );
 };

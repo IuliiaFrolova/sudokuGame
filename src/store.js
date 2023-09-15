@@ -1,4 +1,6 @@
-import create from 'zustand';
+// zustand
+
+import { create } from 'zustand';
 
 const useStore = create((set) => ({
     sudokuGrid: [],
